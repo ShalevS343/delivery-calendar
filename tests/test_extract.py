@@ -38,7 +38,7 @@ def test_html_only_body_extracts_text():
 
 def test_hebrew_body_preserves_digits():
     mail = _parsed("hfd_pickup.eml")
-    assert "RR123456789IL" in mail.text
+    assert "RR123456785IL" in mail.text
     assert "הרצל 12" in mail.text
 
 
@@ -92,7 +92,7 @@ def test_pickup_mail_is_arrival_with_location_kind():
     assert str(shipment.status) == "ready_for_pickup"
     assert str(shipment.location_kind) == "pickup_point"
     assert shipment.arrival_date is not None
-    assert shipment.tracking_number == "RR123456789IL"
+    assert shipment.tracking_number == "RR123456785IL"
 
 
 def test_in_transit_mail_has_no_arrival_date():

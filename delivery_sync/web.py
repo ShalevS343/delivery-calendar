@@ -115,6 +115,8 @@ def create_app(
     @app.post("/shipments/{shipment_id}/accept")
     def accept(shipment_id: int, _: None = Depends(require_auth)):
         store.accept(shipment_id)
+        shipment = store.get_shipment(shipment_id)
+        sync_shipment(store, calendar, shipment, dry_run=settings.dry_run)
         return RedirectResponse("/", status_code=303)
 
     @app.post("/shipments/{shipment_id}/suppress")

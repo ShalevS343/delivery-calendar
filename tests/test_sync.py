@@ -128,3 +128,38 @@ def test_cancelled_deletes_existing_event(tmp_path):
     )
     sync_shipment(store, calendar, cancelled.shipment)
     assert event_id not in calendar.events
+
+
+def test_needs_review_shipment_does_not_create_event(tmp_path):
+    store = _store(tmp_path)
+    calendar = FakeCalendar()
+    result = store.upsert_shipment(
+        _shipment(
+            status=Status.delivered,
+            arrival_date=date(2026, 11, 24),
+            needs_review=True,
+            tracking_number=None,
+            review_reasons=["no_tracking_number"],
+        )
+    )
+    sync_shipment(store, calendar, result.shipment)
+    assert calendar.calls == []
+
+
+def test_accepting_a_review_shipment_creates_its_event(tmp_path):
+    store = _store(tmp_path)
+    calendar = FakeCalendar()
+    result = store.upsert_shipment(
+        _shipment(
+            status=Status.delivered,
+            arrival_date=date(2026, 11, 24),
+            needs_review=True,
+            tracking_number=None,
+            review_reasons=["no_tracking_number"],
+        )
+    )
+    sync_shipment(store, calendar, result.shipment)
+    assert calendar.calls == []
+    store.accept(result.shipment_id)
+    sync_shipment(store, calendar, store.get_shipment(result.shipment_id))
+    assert len(calendar.events) == 1

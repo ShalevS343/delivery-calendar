@@ -50,7 +50,7 @@ def _description(shipment: Shipment) -> str:
     if shipment.order_number:
         lines.append(f"Order: {shipment.order_number}")
     if shipment.package_title:
-        lines.append(f"Subject: {shipment.package_title}")
+        lines.append(f"Mail: {shipment.package_title}")
     if shipment.items:
         items = ", ".join(f"{item.name} x{item.qty}" for item in shipment.items)
         lines.append(f"Items: {items}")

@@ -114,3 +114,11 @@ def test_mail_page_neutralises_links(ctx):
     response = client.get("/mail/m1", auth=AUTH)
     assert response.status_code == 200
     assert 'href="https://evil.example.com/x"' not in response.text
+
+
+def test_accept_creates_the_event_immediately(ctx):
+    client, store, calendar = ctx
+    result = store.upsert_shipment(_shipment(needs_review=True))
+    assert calendar.events == {}
+    client.post(f"/shipments/{result.shipment_id}/accept", auth=AUTH, follow_redirects=False)
+    assert len(calendar.events) == 1

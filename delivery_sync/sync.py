@@ -44,6 +44,10 @@ def sync_shipment(
             store.clear_event(shipment_id)
         return SyncResult("none")
 
+    if shipment.needs_review:
+        # A guessed event is worse than no event: the owner confirms first.
+        return SyncResult("none")
+
     if shipment.status not in ARRIVAL_STATUSES:
         if event_id and shipment.status is Status.cancelled:
             if not dry_run:

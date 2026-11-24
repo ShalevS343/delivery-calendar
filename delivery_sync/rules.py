@@ -7,13 +7,18 @@ last good rule set stays active.
 
 from __future__ import annotations
 
+import os
 import shutil
 from dataclasses import dataclass, field
 from pathlib import Path
 
 import yaml
 
-PACKAGE_RULES = Path(__file__).resolve().parent.parent / "rules"
+# The image keeps the seed rules at /app/rules (read-only); the repo keeps them
+# next to the package. RULES_SEED_DIR makes the installed package find them.
+PACKAGE_RULES = Path(
+    os.environ.get("RULES_SEED_DIR") or Path(__file__).resolve().parent.parent / "rules"
+)
 
 RULE_FILES = ("tracking.yaml", "carriers.yaml", "promos.yaml", "addresses.yaml")
 
