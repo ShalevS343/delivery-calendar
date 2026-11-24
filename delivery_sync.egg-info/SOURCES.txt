@@ -1,0 +1,8 @@
+pyproject.toml
+delivery_sync/__init__.py
+delivery_sync.egg-info/PKG-INFO
+delivery_sync.egg-info/SOURCES.txt
+delivery_sync.egg-info/dependency_links.txt
+delivery_sync.egg-info/entry_points.txt
+delivery_sync.egg-info/requires.txt
+delivery_sync.egg-info/top_level.txt

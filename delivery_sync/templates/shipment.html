@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ shipment.merchant or shipment.carrier_display or "Package" }}</h1>
+<p>
+  <span class="pill">{{ shipment.status }}</span>
+  {% if shipment.needs_review %}<span class="pill warn">needs review</span>{% endif %}
+  {% if shipment.suppressed %}<span class="pill warn">suppressed</span>{% endif %}
+</p>
+
+<table>
+  <tr><th>Tracking</th><td>{{ shipment.tracking_number or "—" }}
+      {% if shipment.tracking_url %}<br><span class="muted">{{ shipment.tracking_url }}</span>{% endif %}</td></tr>
+  <tr><th>Carrier</th><td>{{ shipment.carrier_display or shipment.carrier or "—" }}</td></tr>
+  <tr><th>Order</th><td>{{ shipment.order_number or "—" }}</td></tr>
+  <tr><th>ETA</th><td>{{ shipment.eta_date or "—" }}
+      {% if shipment.eta_window_start %} {{ shipment.eta_window_start }}–{{ shipment.eta_window_end }}{% endif %}</td></tr>
+  <tr><th>Arrival</th><td>{{ shipment.arrival_date or "—" }}</td></tr>
+  <tr><th>Collect by</th><td>{{ shipment.pickup_deadline or "—" }}</td></tr>
+  <tr><th>Location</th><td>{{ shipment.location_text or "—" }} <span class="muted">({{ shipment.location_kind }})</span></td></tr>
+  <tr><th>Fallback</th><td>{{ shipment.alt_location_text or "—" }}</td></tr>
+  <tr><th>Action</th><td>{% if shipment.action_url %}<a href="{{ shipment.action_url }}" rel="noreferrer noopener">{{ shipment.action_label or shipment.action_kind }}</a>{% else %}—{% endif %}</td></tr>
+  <tr><th>Confidence</th><td>{{ shipment.confidence }} ({{ shipment.source }})</td></tr>
+  <tr><th>Calendar</th><td>{{ meta.calendar_event_id or "not created" }}
+      {% if meta.event_etag %}<span class="muted">etag {{ meta.event_etag }}</span>{% endif %}</td></tr>
+</table>
+
+<p>
+  <form method="post" action="/shipments/{{ shipment_id }}/accept"><button>Accept</button></form>
+  <form method="post" action="/shipments/{{ shipment_id }}/resync"><button>Resync calendar</button></form>
+  <form method="post" action="/shipments/{{ shipment_id }}/suppress"><button>Suppress (delete event)</button></form>
+</p>
+
+<h1>History</h1>
+{% if updates %}
+<table>
+  <tr><th>When</th><th>Field</th><th>Old</th><th>New</th></tr>
+  {% for u in updates %}
+  <tr><td class="muted">{{ u["at"] }}</td><td>{{ u["field"] }}</td>
+      <td class="muted">{{ u["old_value"] or "—" }}</td><td>{{ u["new_value"] or "—" }}</td></tr>
+  {% endfor %}
+</table>
+{% else %}
+<p class="muted">No changes recorded yet.</p>
+{% endif %}
+{% endblock %}

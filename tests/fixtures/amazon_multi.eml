@@ -1,0 +1,15 @@
+From: Amazon <shipment-tracking@amazon.com>
+To: owner@example.com
+Subject: 3 packages are on the way
+Date: Tue, 24 Nov 2026 08:00:00 +0200
+Message-ID: <amazon-multi-1@amazon.com>
+X-GM-MSGID: 1004
+Content-Type: text/plain; charset="utf-8"
+
+Your order 555-1111111-2222222 has shipped in 3 packages.
+
+Package 1: TBA123456789012
+Package 2: TBA123456789013
+Package 3: TBA123456789014
+
+Delivery address: Rothschild 22, Tel Aviv

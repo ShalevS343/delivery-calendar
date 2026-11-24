@@ -1,0 +1,22 @@
+# Senders and words that mark bulk/marketing mail. A promo mail with a valid
+# tracking number is still treated as a delivery mail: the number wins.
+domains:
+  - mailchimp.com
+  - sendgrid.net
+  - klaviyo.com
+  - mailgun.org
+  - hubspot.com
+  - constantcontact.com
+  - crm4d.com
+  - monday.com
+
+keywords:
+  - unsubscribe
+  - "% off"
+  - "sale ends"
+  - "last chance"
+  - "black friday"
+  - "מבצע"
+  - "הנחה"
+  - "מכירה"
+  - "להסרה"

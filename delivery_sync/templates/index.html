@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+<p class="muted">
+  Last run: {{ run.last_run_at or "never" }}
+  {% if run.last_run_status %}<span class="pill">{{ run.last_run_status }}</span>{% endif %}
+  {% if dry_run %}<span class="pill warn">DRY RUN — no calendar writes</span>{% endif %}
+</p>
+
+<h1>Needs review ({{ review|length }})</h1>
+{% if review %}
+<table>
+  <tr><th>Status</th><th>Package</th><th>Arrival</th><th>Reasons</th><th></th></tr>
+  {% for sid, s in review %}
+  <tr>
+    <td><span class="pill warn">{{ s.status }}</span></td>
+    <td>
+      <a href="/shipments/{{ sid }}">{{ s.merchant or s.carrier_display or "Package" }}</a>
+      {% if s.tracking_number %}<br><code>{{ s.tracking_number }}</code>{% endif %}
+    </td>
+    <td>{{ s.arrival_date or s.eta_date or "—" }}</td>
+    <td class="muted">{{ s.review_reasons|join(", ") }}</td>
+    <td>
+      <form method="post" action="/shipments/{{ sid }}/accept"><button>Accept</button></form>
+      <form method="post" action="/shipments/{{ sid }}/suppress"><button>Suppress</button></form>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% else %}
+<p class="ok">Nothing waiting.</p>
+{% endif %}
+
+<h1>Recent shipments</h1>
+<table>
+  <tr><th>Status</th><th>Package</th><th>Arrival / ETA</th><th>Location</th><th>Review</th></tr>
+  {% for sid, s in shipments %}
+  <tr>
+    <td><span class="pill">{{ s.status }}</span></td>
+    <td><a href="/shipments/{{ sid }}">{{ s.merchant or s.carrier_display or "Package" }}</a>
+      {% if s.tracking_number %}<br><code>{{ s.tracking_number }}</code>{% endif %}</td>
+    <td>{{ s.arrival_date or s.eta_date or "—" }}</td>
+    <td class="muted">{{ s.location_text or "—" }}{% if s.location_kind != "unknown" %} ({{ s.location_kind }}){% endif %}</td>
+    <td>{% if s.needs_review %}<span class="pill warn">yes</span>{% else %}<span class="pill ok">no</span>{% endif %}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

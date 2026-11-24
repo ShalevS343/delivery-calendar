@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Shipments</h1>
+<table>
+  <tr><th>Status</th><th>Package</th><th>Arrival</th><th>Location</th><th>Event</th><th>Flags</th></tr>
+  {% for sid, s in shipments %}
+  <tr>
+    <td><span class="pill">{{ s.status }}</span></td>
+    <td><a href="/shipments/{{ sid }}">{{ s.merchant or s.carrier_display or "Package" }}</a>
+      {% if s.tracking_number %}<br><code>{{ s.tracking_number }}</code>{% endif %}</td>
+    <td>{{ s.arrival_date or s.eta_date or "—" }}</td>
+    <td class="muted">{{ s.location_text or "—" }}</td>
+    <td class="muted">{{ "yes" if not s.needs_review and s.status in ("ready_for_pickup", "delivered") else "—" }}</td>
+    <td>{% if s.needs_review %}<span class="pill warn">review</span>{% endif %}
+        {% if s.suppressed %}<span class="pill warn">suppressed</span>{% endif %}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

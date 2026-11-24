@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ message["subject"] or "(no subject)" }}</h1>
+<p class="muted">{{ message["from_addr"] }} · {{ message["received_at"] }} · verdict: {{ message["verdict"] }} ({{ message["verdict_rule"] }})</p>
+<pre>{{ message["body_text"] }}</pre>
+{% endblock %}

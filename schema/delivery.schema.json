@@ -1,0 +1,390 @@
+{
+  "$defs": {
+    "ActionKind": {
+      "enum": [
+        "approve_received",
+        "confirm_delivery",
+        "reschedule",
+        "pickup",
+        "pay",
+        "none"
+      ],
+      "title": "ActionKind",
+      "type": "string"
+    },
+    "Item": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "qty": {
+          "default": 1,
+          "title": "Qty",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "Item",
+      "type": "object"
+    },
+    "LocationKind": {
+      "enum": [
+        "destination",
+        "pickup_point",
+        "depot",
+        "unknown"
+      ],
+      "title": "LocationKind",
+      "type": "string"
+    },
+    "Status": {
+      "enum": [
+        "announced",
+        "in_transit",
+        "out_for_delivery",
+        "ready_for_pickup",
+        "delivered",
+        "delayed",
+        "exception",
+        "cancelled",
+        "unknown"
+      ],
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "shipment_key": {
+      "title": "Shipment Key",
+      "type": "string"
+    },
+    "calendar_uid": {
+      "title": "Calendar Uid",
+      "type": "string"
+    },
+    "status": {
+      "$ref": "#/$defs/Status"
+    },
+    "confidence": {
+      "default": 0.0,
+      "title": "Confidence",
+      "type": "number"
+    },
+    "source": {
+      "default": "regex",
+      "title": "Source",
+      "type": "string"
+    },
+    "needs_review": {
+      "default": true,
+      "title": "Needs Review",
+      "type": "boolean"
+    },
+    "suppressed": {
+      "default": false,
+      "title": "Suppressed",
+      "type": "boolean"
+    },
+    "review_reasons": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Review Reasons",
+      "type": "array"
+    },
+    "tracking_number": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Tracking Number"
+    },
+    "tracking_url": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Tracking Url"
+    },
+    "carrier": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Carrier"
+    },
+    "carrier_display": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Carrier Display"
+    },
+    "merchant": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Merchant"
+    },
+    "order_number": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Order Number"
+    },
+    "package_title": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Package Title"
+    },
+    "items": {
+      "items": {
+        "$ref": "#/$defs/Item"
+      },
+      "title": "Items",
+      "type": "array"
+    },
+    "eta_date": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Eta Date"
+    },
+    "eta_window_start": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Eta Window Start"
+    },
+    "eta_window_end": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Eta Window End"
+    },
+    "arrival_date": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Arrival Date"
+    },
+    "delivered_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Delivered At"
+    },
+    "pickup_deadline": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Pickup Deadline"
+    },
+    "location_text": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Location Text"
+    },
+    "location_kind": {
+      "$ref": "#/$defs/LocationKind",
+      "default": "unknown"
+    },
+    "alt_location_text": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Alt Location Text"
+    },
+    "alt_location_kind": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/LocationKind"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "location_lat": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Location Lat"
+    },
+    "location_lon": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Location Lon"
+    },
+    "location_confidence": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Location Confidence"
+    },
+    "maps_url": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Maps Url"
+    },
+    "action_url": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Action Url"
+    },
+    "action_kind": {
+      "$ref": "#/$defs/ActionKind",
+      "default": "none"
+    },
+    "action_label": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Action Label"
+    }
+  },
+  "required": [
+    "shipment_key",
+    "calendar_uid",
+    "status"
+  ],
+  "title": "Shipment",
+  "type": "object"
+}

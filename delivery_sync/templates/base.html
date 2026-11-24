@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>delivery-sync</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0; background: #101418; color: #e6edf3; }
+    header { background: #161b22; padding: 12px 20px; border-bottom: 1px solid #30363d; display: flex; gap: 18px; align-items: center; }
+    header a { color: #e6edf3; text-decoration: none; }
+    header .brand { font-weight: 700; }
+    main { max-width: 1000px; margin: 0 auto; padding: 20px; }
+    h1 { font-size: 20px; margin: 18px 0 10px; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 22px; }
+    th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid #263039; vertical-align: top; }
+    th { color: #9aa7b2; font-weight: 600; font-size: 12px; text-transform: uppercase; }
+    code, pre { background: #161b22; border-radius: 6px; }
+    pre { padding: 10px; white-space: pre-wrap; }
+    .pill { display: inline-block; padding: 2px 7px; border-radius: 10px; font-size: 12px; background: #263039; }
+    .warn { background: #4a2a12; color: #ffd7a8; }
+    .ok { background: #17351f; color: #a8f0bd; }
+    .muted { color: #8b98a5; }
+    form { display: inline; }
+    button { background: #21262d; color: #e6edf3; border: 1px solid #30363d; border-radius: 6px; padding: 5px 10px; cursor: pointer; }
+    button:hover { border-color: #8b949e; }
+  </style>
+</head>
+<body>
+<header>
+  <span class="brand">📦 delivery-sync</span>
+  <a href="/">Review</a>
+  <a href="/shipments">Shipments</a>
+  <a href="/skipped">Skipped</a>
+</header>
+<main>
+{% block content %}{% endblock %}
+</main>
+</body>
+</html>

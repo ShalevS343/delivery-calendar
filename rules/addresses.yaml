@@ -1,0 +1,41 @@
+# Labels introduce an address block. The label decides location_kind; the block
+# itself is read from the following lines.
+labels:
+  destination:
+    - delivery address
+    - shipping address
+    - ship to
+    - delivered to
+    - כתובת למשלוח
+    - כתובת
+  pickup_point:
+    - pickup point
+    - collection point
+    - parcel locker
+    - locker
+    - collect from
+    - נקודת איסוף
+    - נקודת חלוקה
+    - תא שירות
+    - לאיסוף
+  depot:
+    - depot
+    - sorting center
+    - distribution center
+    - מרכז מיון
+
+# When the mail also offers "if you are not home, collect at ..." this label
+# marks a fallback address: it goes to alt_location_*, never to the event.
+fallback_labels:
+  - if you are not home
+  - if unavailable
+  - alternative collection
+  - אם לא נמצאים
+  - כתובת חלופית
+
+# A plausible address line contains a house number and a street word. These
+# patterns are intentionally narrow: a false address is worse than none.
+patterns:
+  street_then_number: '(?P<street>[A-Za-zא-ת][A-Za-zא-ת''"\.\- ]{2,40}?)\s+(?P<number>\d{1,4})\b'
+  number_then_street: '(?P<number>\d{1,4})\s+(?P<street>[A-Za-zא-ת][A-Za-zא-ת''"\.\- ]{2,40})\b'
+  postal_code: '\b\d{5,7}\b'

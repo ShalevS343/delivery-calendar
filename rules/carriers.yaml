@@ -1,0 +1,54 @@
+# Sender domain suffix -> carrier. The longest matching suffix wins.
+senders:
+  - domain: amazon.com
+    carrier: amazon
+    display: Amazon
+  - domain: amazon.co.uk
+    carrier: amazon
+    display: Amazon UK
+  - domain: ups.com
+    carrier: ups
+    display: UPS
+  - domain: fedex.com
+    carrier: fedex
+    display: FedEx
+  - domain: dhl.com
+    carrier: dhl
+    display: DHL
+  - domain: dhl.de
+    carrier: dhl
+    display: DHL
+  - domain: israelpost.co.il
+    carrier: israel_post
+    display: Israel Post
+  - domain: israelpost.net
+    carrier: israel_post
+    display: Israel Post
+  - domain: hfd.co.il
+    carrier: hfd
+    display: HFD
+  - domain: cheetah.co.il
+    carrier: cheetah
+    display: Cheetah
+  - domain: aliexpress.com
+    carrier: aliexpress
+    display: AliExpress
+  - domain: temu.com
+    carrier: temu
+    display: Temu
+  - domain: shein.com
+    carrier: shein
+    display: SHEIN
+
+# Carrier display names used when only the tracking family identifies it.
+carrier_display:
+  ups: UPS
+  fedex: FedEx
+  dhl: DHL
+  amazon: Amazon
+  israel_post: Israel Post
+  hfd: HFD
+  cheetah: Cheetah
+  aliexpress: AliExpress
+  temu: Temu
+  shein: SHEIN

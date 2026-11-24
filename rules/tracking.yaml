@@ -1,0 +1,52 @@
+families:
+  - id: ups
+    pattern: '(?<![A-Z0-9])1Z[0-9A-Z]{16}(?![A-Z0-9])'
+    carrier: ups
+    checksum: ups
+    confidence: 0.95
+    needs_context: false
+  - id: upu_s10
+    pattern: '(?<![A-Z0-9])[A-Z]{2}\d{9}[A-Z]{2}(?![A-Z0-9])'
+    carrier: null
+    checksum: upu
+    confidence: 0.9
+    needs_context: false
+  - id: amazon_tba
+    pattern: '(?<![A-Z0-9])TBA\d{12}(?![A-Z0-9])'
+    carrier: amazon
+    checksum: null
+    confidence: 0.9
+    needs_context: false
+  - id: fedex_12
+    pattern: '(?<![A-Z0-9])\d{12}(?![A-Z0-9])'
+    carrier: fedex
+    checksum: null
+    confidence: 0.55
+    needs_context: true
+  - id: dhl_10
+    pattern: '(?<![A-Z0-9])\d{10}(?![A-Z0-9])'
+    carrier: dhl
+    checksum: null
+    confidence: 0.5
+    needs_context: true
+  - id: generic_long
+    pattern: '(?<![A-Z0-9])[A-Z0-9]{12,22}(?![A-Z0-9])'
+    carrier: null
+    checksum: null
+    confidence: 0.3
+    needs_context: true
+
+# Words that make a low-specificity numeric token believable as a tracking
+# number. Matched case-insensitively within +-60 characters of the token.
+context_words:
+  - tracking
+  - tracking number
+  - consignment
+  - waybill
+  - shipment
+  - parcel
+  - delivery number
+  - מעקב
+  - משלוח
+  - מספר משלוח
+  - צובר

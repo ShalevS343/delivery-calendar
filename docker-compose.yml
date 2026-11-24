@@ -1,0 +1,41 @@
+services:
+  delivery-sync:
+    build: .
+    image: delivery-sync:local
+    container_name: delivery-sync
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      TZ: ${TZ:-Asia/Jerusalem}
+      DB_PATH: /data/delivery.db
+      RAW_DIR: /data/raw
+      STATE_DIR: /data
+      RULES_DIR: /data/rules
+      LOG_DIR: /logs
+      UI_PORT: ${UI_PORT:-8099}
+      DRY_RUN: ${DRY_RUN:-1}
+    ports:
+      - "8099:8099"
+    volumes:
+      - /mnt/ssd/data/apps/delivery-sync:/data
+      - /mnt/ssd/data/apps/delivery-sync/secrets:/secrets
+      - /mnt/ssd/data/apps/delivery-sync/logs:/logs
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      homepage.group: Management
+      homepage.name: Deliveries
+      homepage.icon: mdi-package-variant-closed
+      homepage.href: http://100.115.65.82:8099
+      homepage.description: Delivery mail -> calendar (arrival only)
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

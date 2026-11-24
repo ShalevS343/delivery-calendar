@@ -1,0 +1,18 @@
+From: Amazon <shipment-tracking@amazon.com>
+To: owner@example.com
+Subject: Your package is on the way
+Date: Fri, 20 Nov 2026 09:12:00 +0200
+Message-ID: <amazon-shipped-1@amazon.com>
+X-GM-MSGID: 1001
+Content-Type: text/plain; charset="utf-8"
+
+Hello,
+
+Your order 123-4567890-1234567 has shipped.
+
+Tracking number: 1Z999AA10123456784
+Carrier: UPS
+
+Estimated delivery: Sunday, 22 Nov 2026.
+
+Thanks for shopping with us.

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Skipped as promo ({{ promos|length }})</h1>
+<table>
+  <tr><th>Received</th><th>From</th><th>Subject</th><th>Rule</th></tr>
+  {% for m in promos %}
+  <tr><td class="muted">{{ m["received_at"] }}</td><td>{{ m["from_addr"] }}</td>
+      <td><a href="/mail/{{ m['gm_msgid'] }}">{{ m["subject"] }}</a></td>
+      <td class="muted">{{ m["verdict_rule"] }}</td></tr>
+  {% endfor %}
+</table>
+
+<h1>Skipped as unrelated ({{ unrelated|length }})</h1>
+<table>
+  <tr><th>Received</th><th>From</th><th>Subject</th><th>Rule</th></tr>
+  {% for m in unrelated %}
+  <tr><td class="muted">{{ m["received_at"] }}</td><td>{{ m["from_addr"] }}</td>
+      <td><a href="/mail/{{ m['gm_msgid'] }}">{{ m["subject"] }}</a></td>
+      <td class="muted">{{ m["verdict_rule"] }}</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

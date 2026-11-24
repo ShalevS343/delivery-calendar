@@ -1,0 +1,19 @@
+Metadata-Version: 2.4
+Name: delivery-sync
+Version: 0.1.0
+Summary: Delivery mail to Google Calendar, one event per arrived shipment
+Requires-Python: >=3.12
+Requires-Dist: pydantic<3,>=2.7
+Requires-Dist: dateparser<2,>=1.2
+Requires-Dist: beautifulsoup4<5,>=4.12
+Requires-Dist: PyYAML<7,>=6.0
+Requires-Dist: fastapi<1,>=0.111
+Requires-Dist: uvicorn<1,>=0.30
+Requires-Dist: jinja2<4,>=3.1
+Requires-Dist: APScheduler<4,>=3.10
+Requires-Dist: google-api-python-client<3,>=2.120
+Requires-Dist: google-auth<3,>=2.29
+Requires-Dist: google-auth-httplib2<1,>=0.2
+Provides-Extra: dev
+Requires-Dist: pytest<9,>=8.2; extra == "dev"
+Requires-Dist: httpx<1,>=0.27; extra == "dev"
