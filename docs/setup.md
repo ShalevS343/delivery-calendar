@@ -58,16 +58,45 @@ cap), authorize once on a machine with a browser, copy the resulting
 `token.json` to `secrets/token.json`. This path relies on unverified-app
 refresh-token behaviour, which is why it is not the default.
 
-## 4. Deploy
+## 4. Deploy from Git through Portainer
 
-```bash
-cd /home/server/projects/delivery-sync
-docker compose up -d --build
-docker compose logs --tail 20
-```
+The repository is <https://github.com/ShalevS343/delivery-sync> (public, no
+secrets). Portainer owns the deployment; the Pi is not a place you edit compose
+files on.
 
-First boot with `DRY_RUN=1` is intentional: it fetches, parses and stores, and
+1. Copy `schema/`, `rules/` and everything else you need — nothing to copy. The
+   repo is self-contained; only the secrets file lives on the Pi:
+   `/mnt/ssd/data/apps/delivery-sync/secrets/service-account.json`.
+2. Portainer → **Stacks → Add stack**.
+3. Name: `delivery-sync`.
+4. Build method: **Repository**.
+   - Repository URL: `https://github.com/ShalevS343/delivery-sync`
+   - Compose path: `docker-compose.yml`
+   - Repository reference: `refs/heads/main`
+5. **Environment variables** (Portainer stores these server-side; they are never
+   committed):
+
+   ```
+   MAIL_USER=you@gmail.com
+   MAIL_APP_PASSWORD=abcd efgh ijkl mnop
+   CALENDAR_ID=...@group.calendar.google.com
+   UI_PASSWORD=<the password you want for the UI>
+   DRY_RUN=1
+   ```
+
+   Everything else has a default in `docker-compose.yml`.
+6. **Deploy the stack.** Portainer clones the repo, builds `delivery-sync:local`
+   on the Pi and starts it.
+7. Turn on **GitOps updates** for the stack (Stack details → Automatic updates →
+   Polling, 5 minutes, or copy the webhook into GitHub). From then on a push to
+   `main` is the deployment.
+
+`DRY_RUN=1` on first deploy is intentional: it fetches, parses and stores, and
 prints the event it *would* create, but never calls the calendar.
+
+> The repo is public. If you'd rather it was private, flip it in GitHub settings
+> and add a read-only credential to the Portainer stack — Portainer then clones
+> with that credential.
 
 ## 5. Verify, then go live
 
@@ -83,18 +112,14 @@ docker exec delivery-sync delivery-sync fetch --limit 5
 ```
 
 Open the review UI at `http://100.115.65.82:8099` (user `admin`, password from
-`.env`). Anything the extractor was unsure about is waiting there.
+the stack's `UI_PASSWORD`). Anything the extractor was unsure about is waiting
+there.
 
-When the dry-run output looks right:
-
-```bash
-sed -i 's/^DRY_RUN=1/DRY_RUN=0/' .env
-docker compose up -d
-```
-
-Then send yourself a real arrival mail (or wait for one), confirm one all-day
-event appears on the `Deliveries` calendar on the arrival date, and that the
-iPhone shows it with a tappable location.
+When the dry-run output looks right, change `DRY_RUN=0` in the stack's
+environment variables and hit **Update the stack**. Then send yourself a real
+arrival mail (or wait for one), confirm one all-day event appears on the
+`Deliveries` calendar on the arrival date, and that the iPhone shows it with a
+tappable location.
 
 ## 6. Fixtures (optional, for tuning the parser)
 

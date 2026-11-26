@@ -2,16 +2,22 @@
 
 ## Stack
 
-- Compose project: `delivery-sync` (run from `/home/server/projects/delivery-sync`)
-- Image: `delivery-sync:local`
+- Source of truth: <https://github.com/ShalevS343/delivery-sync>
+- Deployment: Portainer stack `delivery-sync`, built from that repository
+  (commit on `main` or an explicit "Pull and redeploy" in Portainer)
+- Image: `delivery-sync:local` (built by Portainer on the Pi)
 - Container: `delivery-sync`
 - State: `/mnt/ssd/data/apps/delivery-sync/` (SQLite, raw mail, rules, secrets)
 - Logs: `/mnt/ssd/data/apps/delivery-sync/logs/` and `docker logs delivery-sync`
-- UI: `http://100.115.65.82:8099` (basic auth; password in `.env`)
+- UI: `http://100.115.65.82:8099` (basic auth; password is a stack variable)
 
 The container runs as uid 1000 with a read-only root filesystem, `cap_drop: ALL`,
 `no-new-privileges`, and one writable volume. The scheduler runs inside the
 container every `POLL_INTERVAL_MINUTES` (60), with a run at startup.
+
+Nothing is deployed from `/home/server/projects/delivery-sync` any more — that
+directory is a working clone. `docker compose up` there would create a second
+project with a container-name conflict; use Portainer.
 
 ## Health
 
@@ -105,11 +111,15 @@ Suggested nightly cron line:
 
 ## Upgrade
 
+Push to `main` (or use Portainer's editor for a one-off patch on the stack):
+
 ```bash
-cd /home/server/projects/delivery-sync
-git pull
-docker compose up -d --build
+git push origin main
 ```
+
+Then either wait for the stack's polling interval or hit **Pull and redeploy** in
+Portainer. The image is rebuilt from the new commit; the data volume and the
+secrets file are untouched.
 
 The SQLite schema is created with `CREATE TABLE IF NOT EXISTS`; a future column
 change needs a migration step in `Store.migrate()`.

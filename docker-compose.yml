@@ -1,23 +1,70 @@
+# Deployed by Portainer from this Git repository.
+#
+# Portainer clones the repo, builds the image and runs `docker compose up`.
+# Every value below is supplied by the Portainer stack's environment variables,
+# never committed: nothing secret lives in this file or in the repo.
 services:
   delivery-sync:
-    build: .
+    build:
+      context: .
     image: delivery-sync:local
     container_name: delivery-sync
     restart: unless-stopped
-    env_file:
-      - .env
     environment:
       TZ: ${TZ:-Asia/Jerusalem}
-      DB_PATH: /data/delivery.db
-      RAW_DIR: /data/raw
-      STATE_DIR: /data
-      RULES_DIR: /data/rules
-      LOG_DIR: /logs
-      UI_PORT: ${UI_PORT:-8099}
+      # --- mail ---
+      MAIL_USER: ${MAIL_USER:-}
+      MAIL_APP_PASSWORD: ${MAIL_APP_PASSWORD:-}
+      IMAP_HOST: ${IMAP_HOST:-imap.gmail.com}
+      IMAP_PORT: ${IMAP_PORT:-993}
+      MAIL_FOLDER: ${MAIL_FOLDER:-INBOX}
+      IMAP_SEARCH: ${IMAP_SEARCH:-newer_than:7d -category:promotions -category:social -in:spam}
+      LOOKBACK_DAYS: ${LOOKBACK_DAYS:-7}
+      # --- schedule ---
+      POLL_INTERVAL_MINUTES: ${POLL_INTERVAL_MINUTES:-60}
+      MAX_MAILS_PER_RUN: ${MAX_MAILS_PER_RUN:-50}
+      # --- parsing ---
+      PARSER_LANGUAGES: ${PARSER_LANGUAGES:-he,en}
+      DEFAULT_COUNTRY: ${DEFAULT_COUNTRY:-IL}
+      REVIEW_MIN_CONFIDENCE: ${REVIEW_MIN_CONFIDENCE:-0.7}
+      # --- calendar ---
+      CALENDAR_AUTH: ${CALENDAR_AUTH:-service_account}
+      CALENDAR_ID: ${CALENDAR_ID:-}
+      CALENDAR_NAME: ${CALENDAR_NAME:-Deliveries}
+      DELIVERED_RETENTION_DAYS: ${DELIVERED_RETENTION_DAYS:-7}
+      GOOGLE_SA_FILE: ${GOOGLE_SA_FILE:-/secrets/service-account.json}
+      GOOGLE_CREDENTIALS_FILE: ${GOOGLE_CREDENTIALS_FILE:-/secrets/credentials.json}
+      GOOGLE_TOKEN_FILE: ${GOOGLE_TOKEN_FILE:-/secrets/token.json}
+      # --- geo (off by default) ---
+      GEOCODER: ${GEOCODER:-none}
+      NOMINATIM_URL: ${NOMINATIM_URL:-https://nominatim.openstreetmap.org}
+      NOMINATIM_USER_AGENT: ${NOMINATIM_USER_AGENT:-delivery-sync/1.0 (owner)}
+      GEOCODE_MIN_CONFIDENCE: ${GEOCODE_MIN_CONFIDENCE:-0.6}
+      # --- model tier (post-v1, off) ---
+      MODEL_ENABLED: ${MODEL_ENABLED:-0}
+      MODEL_PATH: ${MODEL_PATH:-/data/models/qwen2.5-1.5b-instruct-q4_k_m.gguf}
+      MODEL_THREADS: ${MODEL_THREADS:-3}
+      MODEL_CTX: ${MODEL_CTX:-2048}
+      MODEL_TIMEOUT: ${MODEL_TIMEOUT:-300}
+      MODEL_MAX_CALLS_PER_RUN: ${MODEL_MAX_CALLS_PER_RUN:-5}
+      MODEL_MIN_FREE_MB: ${MODEL_MIN_FREE_MB:-1400}
+      # --- runtime ---
+      DB_PATH: ${DB_PATH:-/data/delivery.db}
+      RAW_DIR: ${RAW_DIR:-/data/raw}
+      STATE_DIR: ${STATE_DIR:-/data}
+      RULES_DIR: ${RULES_DIR:-/data/rules}
+      LOG_DIR: ${LOG_DIR:-/logs}
       DRY_RUN: ${DRY_RUN:-1}
+      UI_ENABLED: ${UI_ENABLED:-1}
+      UI_PORT: ${UI_PORT:-8099}
+      UI_USER: ${UI_USER:-admin}
+      UI_PASSWORD: ${UI_PASSWORD:-}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
     ports:
-      - "8099:8099"
+      - "${UI_PORT:-8099}:8099"
     volumes:
+      # State, SQLite, raw mail, live rules and secrets stay on the SSD, outside
+      # the container and outside Git.
       - /mnt/ssd/data/apps/delivery-sync:/data
       - /mnt/ssd/data/apps/delivery-sync/secrets:/secrets
       - /mnt/ssd/data/apps/delivery-sync/logs:/logs

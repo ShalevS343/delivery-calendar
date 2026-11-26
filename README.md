@@ -18,6 +18,21 @@ and its kind (`destination` / `pickup_point` / `depot`), a fallback address, the
 "confirm receipt / approve / reschedule" link when the mail has one, and a
 confidence plus the reasons a record needs a human.
 
+## Deployment
+
+Deployed by **Portainer from Git**, not from this directory:
+
+- Repository: <https://github.com/ShalevS343/delivery-sync>
+- Portainer stack: `delivery-sync` (Build method: Repository, path
+  `docker-compose.yml`, ref `refs/heads/main`)
+- Configuration: Portainer stack environment variables (`MAIL_USER`,
+  `MAIL_APP_PASSWORD`, `CALENDAR_ID`, `UI_PASSWORD`, `DRY_RUN`, …). Nothing
+  secret is committed; `.env.example` documents every variable and its default.
+- Secrets on disk: `/mnt/ssd/data/apps/delivery-sync/secrets/service-account.json`
+
+A push to `main` plus the stack's polling (or **Pull and redeploy**) is the
+deployment. See `docs/setup.md` and `docs/operations.md`.
+
 ## Quick start (dry run, no credentials)
 
 ```bash
