@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   packages: write
 
 jobs:
@@ -34,6 +34,19 @@ jobs:
             ghcr.io/shalevs343/delivery-calendar:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      # Portainer's poll only deploys when the commit hash changes, so a build
+      # that finishes after the commit was already seen is never picked up.
+      # Pushing an empty marker commit once the image exists gives the poll a
+      # new hash to react to, with the image already in the registry.
+      # (Pushes made with GITHUB_TOKEN do not trigger workflows; "[skip ci]" is
+      # the second guard.)
+      - name: Push a deploy marker
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit --allow-empty -m "ci: image ${GITHUB_SHA::7} published [skip ci]"
+          git push
 
       # A public package lets the Pi pull without storing registry credentials.
       # If the token cannot change visibility, the step is skipped and the
