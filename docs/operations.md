@@ -3,8 +3,10 @@
 ## Stack
 
 - Source of truth: <https://github.com/ShalevS343/delivery-calendar>
-- Deployment: Portainer stack `delivery-sync`, built from that repository
-  (commit on `main` or an explicit "Pull and redeploy" in Portainer)
+- Deployment: Portainer stack **id 13**, `delivery-sync`, built from that
+  repository. GitOps polling is on every 5 minutes (`AutoUpdate.Interval=5m`),
+  so a commit on `main` redeploys on its own; use **Pull and redeploy** for an
+  immediate update.
 - Image: `delivery-sync:local` (built by Portainer on the Pi)
 - Container: `delivery-sync`
 - State: `/mnt/ssd/data/apps/delivery-sync/` (SQLite, raw mail, rules, secrets)
