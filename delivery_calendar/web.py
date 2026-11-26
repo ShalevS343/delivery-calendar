@@ -63,6 +63,7 @@ def create_app(
         limit = max(150, settings.poll_interval_minutes * 2 + 60)
         fresh = age_minutes is None or age_minutes <= limit
         return {
+            "service": "delivery-calendar",
             "ok": fresh and info["last_run_status"] != "error",
             "last_run_at": info["last_run_at"],
             "age_minutes": age_minutes,
