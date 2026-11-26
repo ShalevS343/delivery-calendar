@@ -1,4 +1,4 @@
-from delivery_sync.links import classify_action, extract_urls, unwrap
+from delivery_calendar.links import classify_action, extract_urls, unwrap
 
 
 def test_confirm_delivery_link_classified():

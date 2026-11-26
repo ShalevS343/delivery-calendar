@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from delivery_sync.models import (
+from delivery_calendar.models import (
     ActionKind,
     LocationKind,
     Shipment,

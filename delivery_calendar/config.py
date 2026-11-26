@@ -1,4 +1,4 @@
-"""Settings for delivery-sync, read from the environment.
+"""Settings for delivery-calendar, read from the environment.
 
 Every knob lives in one place so the compose file, the container healthcheck and
 the tests all agree on defaults.
@@ -84,7 +84,7 @@ class Settings:
     # geo
     geocoder: str = "none"
     nominatim_url: str = "https://nominatim.openstreetmap.org"
-    nominatim_user_agent: str = "delivery-sync/1.0 (owner)"
+    nominatim_user_agent: str = "delivery-calendar/1.0 (owner)"
     geocode_min_confidence: float = 0.6
     # model (post-v1, off)
     model_enabled: bool = False
@@ -136,7 +136,7 @@ class Settings:
             geocoder=env.get("GEOCODER", "none"),
             nominatim_url=env.get("NOMINATIM_URL", "https://nominatim.openstreetmap.org"),
             nominatim_user_agent=env.get(
-                "NOMINATIM_USER_AGENT", "delivery-sync/1.0 (owner)"
+                "NOMINATIM_USER_AGENT", "delivery-calendar/1.0 (owner)"
             ),
             geocode_min_confidence=_float(env, "GEOCODE_MIN_CONFIDENCE", 0.6),
             model_enabled=_flag(env, "MODEL_ENABLED", False),

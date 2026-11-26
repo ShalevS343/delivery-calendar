@@ -7,8 +7,8 @@ from datetime import datetime, timezone
 
 from apscheduler.schedulers.background import BackgroundScheduler
 
-from delivery_sync.config import Settings
-from delivery_sync.runner import Runner
+from delivery_calendar.config import Settings
+from delivery_calendar.runner import Runner
 
 log = logging.getLogger(__name__)
 

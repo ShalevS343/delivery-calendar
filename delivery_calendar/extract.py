@@ -6,11 +6,11 @@ import re
 from dataclasses import dataclass, field
 from datetime import date
 
-from delivery_sync.addresses import extract_locations
-from delivery_sync.dates import DateFacts, extract_dates
-from delivery_sync.links import classify_action, extract_urls
-from delivery_sync.mailparse import ParsedMail
-from delivery_sync.models import (
+from delivery_calendar.addresses import extract_locations
+from delivery_calendar.dates import DateFacts, extract_dates
+from delivery_calendar.links import classify_action, extract_urls
+from delivery_calendar.mailparse import ParsedMail
+from delivery_calendar.models import (
     ActionKind,
     LocationKind,
     Shipment,
@@ -18,8 +18,8 @@ from delivery_sync.models import (
     calendar_uid_for,
     shipment_key_for,
 )
-from delivery_sync.normalize import TrackingMatch, extract_tracking
-from delivery_sync.rules import Rules
+from delivery_calendar.normalize import TrackingMatch, extract_tracking
+from delivery_calendar.rules import Rules
 
 _MARKETPLACES = {"amazon", "aliexpress", "temu", "shein", "ebay"}
 

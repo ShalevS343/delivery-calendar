@@ -8,14 +8,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from delivery_sync.calendar_client import (
+from delivery_calendar.calendar_client import (
     CalendarConflict,
     CalendarNotFound,
     CalendarPort,
 )
-from delivery_sync.events import build_event, event_fingerprint
-from delivery_sync.models import ARRIVAL_STATUSES, Shipment, Status
-from delivery_sync.store import Store
+from delivery_calendar.events import build_event, event_fingerprint
+from delivery_calendar.models import ARRIVAL_STATUSES, Shipment, Status
+from delivery_calendar.store import Store
 
 
 @dataclass

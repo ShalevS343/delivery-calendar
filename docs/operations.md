@@ -3,30 +3,30 @@
 ## Stack
 
 - Source of truth: <https://github.com/ShalevS343/delivery-calendar>
-- Deployment: Portainer stack **id 13**, `delivery-sync`, built from that
+- Deployment: Portainer stack **id 13**, `delivery-calendar`, built from that
   repository. GitOps polling is on every 5 minutes (`AutoUpdate.Interval=5m`),
   so a commit on `main` redeploys on its own; use **Pull and redeploy** for an
   immediate update.
-- Image: `delivery-sync:local` (built by Portainer on the Pi)
-- Container: `delivery-sync`
-- State: `/mnt/ssd/data/apps/delivery-sync/` (SQLite, raw mail, rules, secrets)
-- Logs: `/mnt/ssd/data/apps/delivery-sync/logs/` and `docker logs delivery-sync`
+- Image: `delivery-calendar:local` (built by Portainer on the Pi)
+- Container: `delivery-calendar`
+- State: `/mnt/ssd/data/apps/delivery-calendar/` (SQLite, raw mail, rules, secrets)
+- Logs: `/mnt/ssd/data/apps/delivery-calendar/logs/` and `docker logs delivery-calendar`
 - UI: `http://100.115.65.82:8099` (basic auth; password is a stack variable)
 
 The container runs as uid 1000 with a read-only root filesystem, `cap_drop: ALL`,
 `no-new-privileges`, and one writable volume. The scheduler runs inside the
 container every `POLL_INTERVAL_MINUTES` (60), with a run at startup.
 
-Nothing is deployed from `/home/server/projects/delivery-sync` any more — that
+Nothing is deployed from `/home/server/projects/delivery-calendar` any more — that
 directory is a working clone. `docker compose up` there would create a second
 project with a container-name conflict; use Portainer.
 
 ## Health
 
 ```bash
-docker ps --filter name=delivery-sync
+docker ps --filter name=delivery-calendar
 curl -s http://127.0.0.1:8099/healthz
-docker logs --tail 50 delivery-sync
+docker logs --tail 50 delivery-calendar
 ```
 
 `/healthz` is unauthenticated (the container healthcheck uses it) and returns:
@@ -53,12 +53,12 @@ A healthy container logs one `run finished` line per hour.
 Rules are data and can be edited without a rebuild:
 
 ```bash
-sudo -u server $EDITOR /mnt/ssd/data/apps/delivery-sync/rules/promos.yaml
-docker exec delivery-sync delivery-sync reload
+sudo -u server $EDITOR /mnt/ssd/data/apps/delivery-calendar/rules/promos.yaml
+docker exec delivery-calendar delivery-calendar reload
 ```
 
 An invalid file is rejected with the file name and line; the previous rules stay
-active. `delivery-sync reload` prints the loaded families so you can see what is
+active. `delivery-calendar reload` prints the loaded families so you can see what is
 in effect.
 
 ## Day-to-day actions in the UI
@@ -75,9 +75,9 @@ in effect.
 ## Re-running and re-parsing
 
 ```bash
-docker exec delivery-sync delivery-sync run          # poll now
-docker exec delivery-sync delivery-sync events       # arrival payloads only
-docker exec delivery-sync delivery-sync reparse --limit 50
+docker exec delivery-calendar delivery-calendar run          # poll now
+docker exec delivery-calendar delivery-calendar events       # arrival payloads only
+docker exec delivery-calendar delivery-calendar reparse --limit 50
 ```
 
 Only arrival statuses (`ready_for_pickup`, `delivered`) ever produce calendar
@@ -89,14 +89,14 @@ calls, so `events` printing nothing while shipments exist is normal and means
 SQLite in WAL mode; a consistent copy needs `.backup`, not `cp`:
 
 ```bash
-sqlite3 /mnt/ssd/data/apps/delivery-sync/delivery.db \
-  ".backup '/mnt/ssd/backups/delivery-sync/delivery-$(date +%F).db'"
+sqlite3 /mnt/ssd/data/apps/delivery-calendar/delivery.db \
+  ".backup '/mnt/ssd/backups/delivery-calendar/delivery-$(date +%F).db'"
 ```
 
 Suggested nightly cron line:
 
 ```
-15 3 * * * sqlite3 /mnt/ssd/data/apps/delivery-sync/delivery.db ".backup '/mnt/ssd/backups/delivery-sync/delivery-$(date +\%F).db'" && find /mnt/ssd/backups/delivery-sync -name 'delivery-*.db' -mtime +14 -delete
+15 3 * * * sqlite3 /mnt/ssd/data/apps/delivery-calendar/delivery.db ".backup '/mnt/ssd/backups/delivery-calendar/delivery-$(date +\%F).db'" && find /mnt/ssd/backups/delivery-calendar -name 'delivery-*.db' -mtime +14 -delete
 ```
 
 ## Troubleshooting
@@ -105,11 +105,11 @@ Suggested nightly cron line:
 |---|---|
 | `idle` runs | `MAIL_USER` / `MAIL_APP_PASSWORD` empty in `.env` |
 | `fetch: ...` error | app password revoked; IMAP login blocked; folder name wrong (`[Gmail]/Deliveries` must exist) |
-| `GOOGLE_SA_FILE not found` | key not at `/mnt/ssd/data/apps/delivery-sync/secrets/service-account.json` |
+| `GOOGLE_SA_FILE not found` | key not at `/mnt/ssd/data/apps/delivery-calendar/secrets/service-account.json` |
 | `403` from Calendar | calendar not shared with the service account, or shared read-only |
 | Event missing though the mail arrived | open the record in the UI: `needs_review`, `suppressed`, or status not yet arrived |
 | Duplicate events | should be impossible via `iCalUID`; check `calendar_uid` is unchanged in the DB, and never mint a second one |
-| Parse regression after a rules edit | `delivery-sync reload` shows the error and keeps the old rules |
+| Parse regression after a rules edit | `delivery-calendar reload` shows the error and keeps the old rules |
 
 ## Upgrade
 

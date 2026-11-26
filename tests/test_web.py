@@ -3,12 +3,12 @@ from datetime import date, datetime, timezone
 import pytest
 from fastapi.testclient import TestClient
 
-from delivery_sync.calendar_client import FakeCalendar
-from delivery_sync.config import Settings
-from delivery_sync.models import Shipment, Status, calendar_uid_for
-from delivery_sync.store import Store
-from delivery_sync.sync import sync_shipment
-from delivery_sync.web import create_app
+from delivery_calendar.calendar_client import FakeCalendar
+from delivery_calendar.config import Settings
+from delivery_calendar.models import Shipment, Status, calendar_uid_for
+from delivery_calendar.store import Store
+from delivery_calendar.sync import sync_shipment
+from delivery_calendar.web import create_app
 
 AUTH = ("admin", "secret")
 

@@ -10,7 +10,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 
-from delivery_sync.rules import AddressRules, Rules
+from delivery_calendar.rules import AddressRules, Rules
 
 _KIND_BY_LABEL = ("destination", "pickup_point", "depot")
 

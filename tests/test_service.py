@@ -3,12 +3,12 @@ from pathlib import Path
 
 import pytest
 
-from delivery_sync.calendar_client import FakeCalendar
-from delivery_sync.config import Settings
-from delivery_sync.imap_source import RawMail, plan_fetch
-from delivery_sync.rules import load_rules
-from delivery_sync.service import run_once
-from delivery_sync.store import Store
+from delivery_calendar.calendar_client import FakeCalendar
+from delivery_calendar.config import Settings
+from delivery_calendar.imap_source import RawMail, plan_fetch
+from delivery_calendar.rules import load_rules
+from delivery_calendar.service import run_once
+from delivery_calendar.store import Store
 
 FIXTURES = Path(__file__).parent / "fixtures"
 
@@ -102,7 +102,7 @@ def test_one_bad_message_does_not_abort_run(tmp_path):
     def flaky_parse(raw: bytes):
         if b"POISON" in raw:
             raise ValueError("cannot parse this one")
-        from delivery_sync.mailparse import parse_message
+        from delivery_calendar.mailparse import parse_message
 
         return parse_message(raw)
 

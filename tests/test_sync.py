@@ -1,9 +1,9 @@
 from datetime import date, datetime, timezone
 
-from delivery_sync.calendar_client import FakeCalendar
-from delivery_sync.models import Shipment, Status, calendar_uid_for
-from delivery_sync.store import Store
-from delivery_sync.sync import sync_shipment
+from delivery_calendar.calendar_client import FakeCalendar
+from delivery_calendar.models import Shipment, Status, calendar_uid_for
+from delivery_calendar.store import Store
+from delivery_calendar.sync import sync_shipment
 
 
 def _shipment(**overrides) -> Shipment:
@@ -80,7 +80,7 @@ def test_duplicate_insert_adopts_existing(tmp_path):
     # Simulate a rebuilt database: the event already exists in Google.
     existing_id, _ = calendar.insert(
         {
-            "iCalUID": f"{shipment.calendar_uid}@delivery-sync.local",
+            "iCalUID": f"{shipment.calendar_uid}@delivery-calendar.local",
             "summary": "old",
             "start": {"date": "2026-11-24"},
             "end": {"date": "2026-11-25"},

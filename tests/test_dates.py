@@ -1,6 +1,6 @@
 from datetime import date
 
-from delivery_sync.dates import extract_dates
+from delivery_calendar.dates import extract_dates
 
 
 def _facts(text: str, mail_day: date = date(2026, 11, 20)):

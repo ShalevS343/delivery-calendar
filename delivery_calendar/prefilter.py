@@ -8,9 +8,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from delivery_sync.mailparse import ParsedMail
-from delivery_sync.normalize import extract_tracking
-from delivery_sync.rules import Rules
+from delivery_calendar.mailparse import ParsedMail
+from delivery_calendar.normalize import extract_tracking
+from delivery_calendar.rules import Rules
 
 _DELIVERY_WORDS = (
     "delivery",

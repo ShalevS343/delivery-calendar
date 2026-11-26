@@ -2,14 +2,14 @@ from pathlib import Path
 
 import pytest
 
-from delivery_sync.normalize import (
+from delivery_calendar.normalize import (
     extract_tracking,
     upu_check_digit,
     upu_checksum_ok,
     ups_check_digit,
     ups_checksum_ok,
 )
-from delivery_sync.rules import RuleCache, RuleError, load_rules
+from delivery_calendar.rules import RuleCache, RuleError, load_rules
 
 
 def test_upu_check_digit_is_self_consistent():
@@ -62,7 +62,7 @@ def test_carrier_for_unknown_sender_is_none():
 def test_bad_rules_file_keeps_previous_rules(tmp_path: Path):
     import shutil
 
-    from delivery_sync.rules import PACKAGE_RULES
+    from delivery_calendar.rules import PACKAGE_RULES
 
     seed = tmp_path / "seed"
     live = tmp_path / "live"

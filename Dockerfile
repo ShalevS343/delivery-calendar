@@ -9,7 +9,7 @@ ENV PYTHONUNBUFFERED=1 \
 WORKDIR /app
 
 COPY pyproject.toml ./
-COPY delivery_sync ./delivery_sync
+COPY delivery_calendar ./delivery_calendar
 COPY rules ./rules
 COPY schema ./schema
 
@@ -24,4 +24,4 @@ EXPOSE 8099
 HEALTHCHECK --interval=60s --timeout=5s --start-period=60s --retries=3 \
     CMD python -c "import sys,urllib.request; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8099/healthz', timeout=4).status == 200 else 1)"
 
-CMD ["delivery-sync", "serve"]
+CMD ["delivery-calendar", "serve"]

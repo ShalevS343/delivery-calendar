@@ -1,4 +1,4 @@
-# delivery-sync
+# delivery-calendar
 
 Reads delivery email from a personal Gmail (IMAP + app password), normalizes it
 into one strict SQLite record per **shipment**, and writes **one all-day Google
@@ -23,12 +23,12 @@ confidence plus the reasons a record needs a human.
 Deployed by **Portainer from Git**, not from this directory:
 
 - Repository: <https://github.com/ShalevS343/delivery-calendar>
-- Portainer stack: `delivery-sync` (Build method: Repository, path
+- Portainer stack: `delivery-calendar` (Build method: Repository, path
   `docker-compose.yml`, ref `refs/heads/main`)
 - Configuration: Portainer stack environment variables (`MAIL_USER`,
   `MAIL_APP_PASSWORD`, `CALENDAR_ID`, `UI_PASSWORD`, `DRY_RUN`, …). Nothing
   secret is committed; `.env.example` documents every variable and its default.
-- Secrets on disk: `/mnt/ssd/data/apps/delivery-sync/secrets/service-account.json`
+- Secrets on disk: `/mnt/ssd/data/apps/delivery-calendar/secrets/service-account.json`
 
 A push to `main` plus the stack's polling (or **Pull and redeploy**) is the
 deployment. See `docs/setup.md` and `docs/operations.md`.
@@ -38,7 +38,7 @@ deployment. See `docs/setup.md` and `docs/operations.md`.
 ```bash
 cp .env.example .env
 python3 -m venv .venv && .venv/bin/pip install -e '.[dev]'
-.venv/bin/delivery-sync check
+.venv/bin/delivery-calendar check
 .venv/bin/pytest
 ```
 
@@ -51,7 +51,7 @@ python3 -m venv .venv && .venv/bin/pip install -e '.[dev]'
 ## Layout
 
 ```
-delivery_sync/   code (config, schema, extraction, store, calendar, UI)
+delivery_calendar/   code (config, schema, extraction, store, calendar, UI)
 rules/           seed YAML: tracking families, carriers, promos, addresses
 schema/          generated JSON Schema for the shipment record
 tests/           unit + fixture tests, fake IMAP and fake Calendar

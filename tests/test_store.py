@@ -2,8 +2,8 @@ from datetime import date, datetime, timezone
 
 import pytest
 
-from delivery_sync.models import Shipment, Status, calendar_uid_for, shipment_key_for
-from delivery_sync.store import Store, apply_update
+from delivery_calendar.models import Shipment, Status, calendar_uid_for, shipment_key_for
+from delivery_calendar.store import Store, apply_update
 
 
 def _shipment(**overrides) -> Shipment:

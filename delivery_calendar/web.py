@@ -12,10 +12,10 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.templating import Jinja2Templates
 
-from delivery_sync.calendar_client import CalendarNotFound, CalendarPort
-from delivery_sync.config import Settings
-from delivery_sync.store import Store
-from delivery_sync.sync import sync_shipment
+from delivery_calendar.calendar_client import CalendarNotFound, CalendarPort
+from delivery_calendar.config import Settings
+from delivery_calendar.store import Store
+from delivery_calendar.sync import sync_shipment
 
 TEMPLATES = Path(__file__).parent / "templates"
 
@@ -26,7 +26,7 @@ def create_app(
     calendar: CalendarPort,
     runner: Callable[[], dict] | None = None,
 ) -> FastAPI:
-    app = FastAPI(title="delivery-sync", docs_url=None, redoc_url=None)
+    app = FastAPI(title="delivery-calendar", docs_url=None, redoc_url=None)
     templates = Jinja2Templates(directory=str(TEMPLATES))
     security = HTTPBasic(auto_error=False)
 
@@ -38,14 +38,14 @@ def create_app(
         if credentials is None:
             raise HTTPException(
                 status_code=401,
-                headers={"WWW-Authenticate": 'Basic realm="delivery-sync"'},
+                headers={"WWW-Authenticate": 'Basic realm="delivery-calendar"'},
             )
         user_ok = secrets.compare_digest(credentials.username, settings.ui_user)
         password_ok = secrets.compare_digest(credentials.password, settings.ui_password)
         if not (user_ok and password_ok):
             raise HTTPException(
                 status_code=401,
-                headers={"WWW-Authenticate": 'Basic realm="delivery-sync"'},
+                headers={"WWW-Authenticate": 'Basic realm="delivery-calendar"'},
             )
 
     @app.get("/healthz")

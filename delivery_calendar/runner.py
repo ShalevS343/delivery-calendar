@@ -8,12 +8,12 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
-from delivery_sync.calendar_client import GoogleCalendar
-from delivery_sync.config import Settings
-from delivery_sync.imap_source import ImapSource
-from delivery_sync.rules import RuleCache
-from delivery_sync.service import run_once
-from delivery_sync.store import Store
+from delivery_calendar.calendar_client import GoogleCalendar
+from delivery_calendar.config import Settings
+from delivery_calendar.imap_source import ImapSource
+from delivery_calendar.rules import RuleCache
+from delivery_calendar.service import run_once
+from delivery_calendar.store import Store
 
 log = logging.getLogger(__name__)
 

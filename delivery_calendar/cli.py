@@ -8,20 +8,20 @@ import logging
 import sys
 from pathlib import Path
 
-from delivery_sync.calendar_client import FakeCalendar, GoogleCalendar
-from delivery_sync.config import ConfigError, Settings
-from delivery_sync.events import build_event
-from delivery_sync.imap_source import ImapSource
-from delivery_sync.mailparse import parse_message
-from delivery_sync.models import Shipment
-from delivery_sync.rules import RuleCache
-from delivery_sync.runner import Runner
-from delivery_sync.service import run_once
-from delivery_sync.store import Store
-from delivery_sync.sync import sync_shipment
-from delivery_sync.web import create_app
+from delivery_calendar.calendar_client import FakeCalendar, GoogleCalendar
+from delivery_calendar.config import ConfigError, Settings
+from delivery_calendar.events import build_event
+from delivery_calendar.imap_source import ImapSource
+from delivery_calendar.mailparse import parse_message
+from delivery_calendar.models import Shipment
+from delivery_calendar.rules import RuleCache
+from delivery_calendar.runner import Runner
+from delivery_calendar.service import run_once
+from delivery_calendar.store import Store
+from delivery_calendar.sync import sync_shipment
+from delivery_calendar.web import create_app
 
-log = logging.getLogger("delivery_sync")
+log = logging.getLogger("delivery_calendar")
 
 
 def _bootstrap(settings: Settings) -> tuple[Store, RuleCache]:
@@ -114,7 +114,7 @@ def cmd_reparse(settings: Settings, args) -> int:
             continue
         raw = Path(path).read_bytes()
         mail = parse_message(raw)
-        from delivery_sync.extract import extract
+        from delivery_calendar.extract import extract
 
         store.conn.execute("DELETE FROM messages WHERE gm_msgid = ?", (mail.gm_msgid,))
         report = type("R", (), {"errors": []})()
@@ -173,7 +173,7 @@ def cmd_export_fixtures(settings: Settings, args) -> int:
 def cmd_serve(settings: Settings, _args) -> int:
     import uvicorn
 
-    from delivery_sync.scheduler import start_scheduler
+    from delivery_calendar.scheduler import start_scheduler
 
     logging.basicConfig(
         level=getattr(logging, settings.log_level, logging.INFO),
@@ -200,7 +200,7 @@ def cmd_serve(settings: Settings, _args) -> int:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="delivery-sync")
+    parser = argparse.ArgumentParser(prog="delivery-calendar")
     sub = parser.add_subparsers(dest="command")
     sub.add_parser("serve", help="run the scheduler and the review UI")
 

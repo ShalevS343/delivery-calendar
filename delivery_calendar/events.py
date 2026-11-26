@@ -5,7 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 
-from delivery_sync.models import Shipment, Status
+from delivery_calendar.models import Shipment, Status
 
 _PREFIX = {
     Status.ready_for_pickup: "📦 Ready for pickup",
@@ -72,7 +72,7 @@ def build_event(shipment: Shipment, calendar_id: str = "") -> dict:
 
     end = shipment.arrival_date + timedelta(days=1)
     event = {
-        "iCalUID": f"{shipment.calendar_uid}@delivery-sync.local",
+        "iCalUID": f"{shipment.calendar_uid}@delivery-calendar.local",
         "summary": event_title(shipment),
         "description": _description(shipment),
         "start": {"date": shipment.arrival_date.isoformat()},
@@ -80,7 +80,7 @@ def build_event(shipment: Shipment, calendar_id: str = "") -> dict:
         "transparency": "transparent",
         "extendedProperties": {
             "private": {
-                "delivery_sync": "1",
+                "delivery_calendar": "1",
                 "calendar_uid": shipment.calendar_uid,
             }
         },

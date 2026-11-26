@@ -1,9 +1,9 @@
 from pathlib import Path
 
-from delivery_sync.extract import extract
-from delivery_sync.mailparse import parse_message
-from delivery_sync.prefilter import classify
-from delivery_sync.rules import load_rules
+from delivery_calendar.extract import extract
+from delivery_calendar.mailparse import parse_message
+from delivery_calendar.prefilter import classify
+from delivery_calendar.rules import load_rules
 
 FIXTURES = Path(__file__).parent / "fixtures"
 

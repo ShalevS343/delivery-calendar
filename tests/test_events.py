@@ -1,7 +1,7 @@
 from datetime import date
 
-from delivery_sync.events import build_event, event_fingerprint, event_title
-from delivery_sync.models import Shipment, Status, calendar_uid_for
+from delivery_calendar.events import build_event, event_fingerprint, event_title
+from delivery_calendar.models import Shipment, Status, calendar_uid_for
 
 
 def _shipment(**overrides) -> Shipment:
@@ -29,9 +29,9 @@ def test_event_is_all_day_on_arrival_date():
 def test_event_has_ical_uid_and_private_props():
     shipment = _shipment()
     event = build_event(shipment)
-    assert event["iCalUID"] == f"{shipment.calendar_uid}@delivery-sync.local"
+    assert event["iCalUID"] == f"{shipment.calendar_uid}@delivery-calendar.local"
     assert event["extendedProperties"]["private"]["calendar_uid"] == shipment.calendar_uid
-    assert event["extendedProperties"]["private"]["delivery_sync"] == "1"
+    assert event["extendedProperties"]["private"]["delivery_calendar"] == "1"
 
 
 def test_event_location_is_address_string():

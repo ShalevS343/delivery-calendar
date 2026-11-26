@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from datetime import date, datetime, timezone
 from pathlib import Path
 
-from delivery_sync.models import (
+from delivery_calendar.models import (
     ARRIVAL_STATUSES,
     STATUS_RANK,
     TERMINAL_STATUSES,

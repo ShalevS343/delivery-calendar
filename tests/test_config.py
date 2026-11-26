@@ -1,4 +1,4 @@
-from delivery_sync.config import Settings
+from delivery_calendar.config import Settings
 
 
 def test_settings_defaults():

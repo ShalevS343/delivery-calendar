@@ -11,8 +11,8 @@ import re
 from dataclasses import dataclass
 from datetime import date, timedelta
 
-from delivery_sync.config import Settings
-from delivery_sync.store import Store
+from delivery_calendar.config import Settings
+from delivery_calendar.store import Store
 
 
 @dataclass(frozen=True)

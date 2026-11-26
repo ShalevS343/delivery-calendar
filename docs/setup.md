@@ -7,8 +7,8 @@ until the mailbox and the calendar share are in place.
 
 1. Google Account → Security → turn on **2-Step Verification** (required).
 2. Go to <https://myaccount.google.com/apppasswords>, create an app password
-   named `delivery-sync`.
-3. Put the 16 characters (spaces are fine) in `/home/server/projects/delivery-sync/.env`:
+   named `delivery-calendar`.
+3. Put the 16 characters (spaces are fine) in `/home/server/projects/delivery-calendar/.env`:
 
    ```
    MAIL_USER=you@gmail.com
@@ -31,19 +31,19 @@ The calendar stays owned by you. The service only writes to it.
 
 ## 3. Google Cloud service account (default auth)
 
-1. <https://console.cloud.google.com> → new project `delivery-sync`.
+1. <https://console.cloud.google.com> → new project `delivery-calendar`.
 2. **APIs & Services → Library** → enable **Google Calendar API**.
-3. **IAM & Admin → Service Accounts** → create `delivery-sync` → done.
+3. **IAM & Admin → Service Accounts** → create `delivery-calendar` → done.
 4. Open it → **Keys** → Add key → JSON → download.
 5. Save it as:
 
    ```
-   /mnt/ssd/data/apps/delivery-sync/secrets/service-account.json
+   /mnt/ssd/data/apps/delivery-calendar/secrets/service-account.json
    chmod 600 that file
    ```
 
 6. Copy the service account email
-   (`delivery-sync@<project>.iam.gserviceaccount.com`).
+   (`delivery-calendar@<project>.iam.gserviceaccount.com`).
 7. Back in Google Calendar → `Deliveries` → **Settings and sharing** → **Share
    with specific people** → paste the service account email → permission
    **Make changes to events** → Send.
@@ -66,9 +66,9 @@ files on.
 
 1. Copy `schema/`, `rules/` and everything else you need — nothing to copy. The
    repo is self-contained; only the secrets file lives on the Pi:
-   `/mnt/ssd/data/apps/delivery-sync/secrets/service-account.json`.
+   `/mnt/ssd/data/apps/delivery-calendar/secrets/service-account.json`.
 2. Portainer → **Stacks → Add stack**.
-3. Name: `delivery-sync`.
+3. Name: `delivery-calendar`.
 4. Build method: **Repository**.
    - Repository URL: `https://github.com/ShalevS343/delivery-calendar`
    - Compose path: `docker-compose.yml`
@@ -85,7 +85,7 @@ files on.
    ```
 
    Everything else has a default in `docker-compose.yml`.
-6. **Deploy the stack.** Portainer clones the repo, builds `delivery-sync:local`
+6. **Deploy the stack.** Portainer clones the repo, builds `delivery-calendar:local`
    on the Pi and starts it.
 7. Turn on **GitOps updates** for the stack (Stack details → Automatic updates →
    Polling, 5 minutes, or copy the webhook into GitHub). From then on a push to
@@ -105,10 +105,10 @@ prints the event it *would* create, but never calls the calendar.
 curl -s http://127.0.0.1:8099/healthz
 
 # what would have been written to the calendar
-docker exec delivery-sync delivery-sync events | head -60
+docker exec delivery-calendar delivery-calendar events | head -60
 
 # real mail headers the service can see
-docker exec delivery-sync delivery-sync fetch --limit 5
+docker exec delivery-calendar delivery-calendar fetch --limit 5
 ```
 
 Open the review UI at `http://100.115.65.82:8099` (user `admin`, password from
@@ -125,12 +125,12 @@ tappable location.
 
 ```bash
 # real mail, with addresses: keep on the SSD, never in git
-docker exec delivery-sync delivery-sync export-fixtures --limit 30 \
+docker exec delivery-calendar delivery-calendar export-fixtures --limit 30 \
   --out /data/fixtures
 
 # copy them out to the test suite when you want to iterate
-docker cp delivery-sync:/data/fixtures ./fixtures
+docker cp delivery-calendar:/data/fixtures ./fixtures
 ```
 
-`delivery-sync reparse --limit 50` re-runs extraction over stored mail after a
+`delivery-calendar reparse --limit 50` re-runs extraction over stored mail after a
 rules change, without waiting for new mail.

@@ -1,5 +1,5 @@
-from delivery_sync.addresses import extract_locations
-from delivery_sync.rules import load_rules
+from delivery_calendar.addresses import extract_locations
+from delivery_calendar.rules import load_rules
 
 
 def test_pickup_label_sets_kind_pickup_point():

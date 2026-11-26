@@ -10,7 +10,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 
-from delivery_sync.rules import Rules, TrackingFamily
+from delivery_calendar.rules import Rules, TrackingFamily
 
 _UPU_COUNTRY_CARRIERS = {
     "IL": "israel_post",

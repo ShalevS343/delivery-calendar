@@ -8,15 +8,15 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Callable
 
-from delivery_sync.calendar_client import CalendarPort
-from delivery_sync.config import Settings
-from delivery_sync.extract import extract
-from delivery_sync.mailparse import ParsedMail, parse_message
-from delivery_sync.models import ARRIVAL_STATUSES
-from delivery_sync.prefilter import classify
-from delivery_sync.rules import Rules
-from delivery_sync.store import Store
-from delivery_sync.sync import sync_shipment
+from delivery_calendar.calendar_client import CalendarPort
+from delivery_calendar.config import Settings
+from delivery_calendar.extract import extract
+from delivery_calendar.mailparse import ParsedMail, parse_message
+from delivery_calendar.models import ARRIVAL_STATUSES
+from delivery_calendar.prefilter import classify
+from delivery_calendar.rules import Rules
+from delivery_calendar.store import Store
+from delivery_calendar.sync import sync_shipment
 
 log = logging.getLogger(__name__)
 
