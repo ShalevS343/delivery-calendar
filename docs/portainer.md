@@ -30,6 +30,13 @@ Measured on 2026-11-26: commit `a020ab3` pushed at 19:57 was live at 20:00:37,
 i.e. one poll tick after the image was available. The container restarted on the
 new digest and was healthy within ~40 s.
 
+The poll only reacts to a **changed commit hash**, so a commit whose image is
+published minutes later is never redeployed. The workflow therefore pushes an
+empty `ci: image <sha> published [skip ci]` commit after the image is in GHCR;
+that marker is what the poll deploys. Empty marker commits in the history are
+normal, and they never rebuild (GITHUB_TOKEN pushes do not trigger workflows, and
+`[skip ci]` guards it a second time).
+
 ## Trigger a redeploy now (don't wait for the poll)
 
 ```bash
