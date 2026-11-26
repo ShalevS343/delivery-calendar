@@ -101,3 +101,33 @@ def test_in_transit_mail_has_no_arrival_date():
     shipment = candidates[0].shipment
     assert str(shipment.status) == "in_transit"
     assert shipment.arrival_date is None
+
+
+def _mail(raw: bytes):
+    return parse_message(raw)
+
+
+def test_repo_notification_is_not_a_delivery():
+    raw = (
+        b"From: GitHub <noreply@github.com>\r\n"
+        b"Subject: [GitHub] A new public key was added to ShalevS343/delivery-calendar\r\n"
+        b"Date: Thu, 26 Nov 2026 11:14:00 +0000\r\n"
+        b"Message-ID: <gh-1@github.com>\r\n"
+        b"Content-Type: text/plain; charset=utf-8\r\n\r\n"
+        b"The following SSH key was added to the ShalevS343/delivery-calendar repository.\r\n"
+    )
+    verdict = classify(_mail(raw), load_rules(None, None))
+    assert verdict.kind == "unrelated"
+
+
+def test_delivery_word_plus_a_date_is_a_delivery():
+    raw = (
+        b"From: shop@example.com\r\n"
+        b"Subject: Your delivery arrives tomorrow\r\n"
+        b"Date: Thu, 26 Nov 2026 11:14:00 +0000\r\n"
+        b"Message-ID: <shop-1@example.com>\r\n"
+        b"Content-Type: text/plain; charset=utf-8\r\n\r\n"
+        b"Your parcel is on the way and will be delivered tomorrow.\r\n"
+    )
+    verdict = classify(_mail(raw), load_rules(None, None))
+    assert verdict.kind == "delivery"
