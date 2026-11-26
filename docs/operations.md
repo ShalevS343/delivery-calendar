@@ -3,10 +3,11 @@
 ## Stack
 
 - Source of truth: <https://github.com/ShalevS343/delivery-calendar>
-- Deployment: Portainer stack **id 13**, `delivery-calendar`, built from that
-  repository. GitOps polling is on every 5 minutes (`AutoUpdate.Interval=5m`),
-  so a commit on `main` redeploys on its own; use **Pull and redeploy** for an
-  immediate update.
+- Deployment: Portainer stack **id 14**, `delivery-calendar`, built from that
+  repository. GitOps polling is enabled on the stack's Git source (id 3) at a
+  5-minute interval, so a commit on `main` redeploys on its own. Portainer 2.45
+  keeps that interval on the *source*, not on the stack's `AutoUpdate` block —
+  setting only `AutoUpdate` starts no job.
 - Image: `delivery-calendar:local` (built by Portainer on the Pi)
 - Container: `delivery-calendar`
 - State: `/mnt/ssd/data/apps/delivery-calendar/` (SQLite, raw mail, rules, secrets)

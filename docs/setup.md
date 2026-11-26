@@ -87,9 +87,9 @@ files on.
    Everything else has a default in `docker-compose.yml`.
 6. **Deploy the stack.** Portainer clones the repo, builds `delivery-calendar:local`
    on the Pi and starts it.
-7. Turn on **GitOps updates** for the stack (Stack details → Automatic updates →
-   Polling, 5 minutes, or copy the webhook into GitHub). From then on a push to
-   `main` is the deployment.
+7. Turn on polling for the stack's **Git source** (Portainer 2.45 shows it on the
+   source, interval 5 minutes). From then on a push to `main` is the deployment.
+   A stack `AutoUpdate` block alone does not start the poll job.
 
 `DRY_RUN=1` on first deploy is intentional: it fetches, parses and stores, and
 prints the event it *would* create, but never calls the calendar.
