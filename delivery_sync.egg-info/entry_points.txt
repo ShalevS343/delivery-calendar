@@ -1,2 +1,0 @@
-[console_scripts]
-delivery-sync = delivery_sync.cli:main
