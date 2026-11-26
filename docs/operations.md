@@ -8,7 +8,8 @@
   5-minute interval, so a commit on `main` redeploys on its own. Portainer 2.45
   keeps that interval on the *source*, not on the stack's `AutoUpdate` block —
   setting only `AutoUpdate` starts no job.
-- Image: `delivery-calendar:local` (built by Portainer on the Pi)
+- Image: `ghcr.io/shalevs343/delivery-calendar:latest` (public; built by the
+  `image` GitHub Actions workflow on every push to `main`)
 - Container: `delivery-calendar`
 - State: `/mnt/ssd/data/apps/delivery-calendar/` (SQLite, raw mail, rules, secrets)
 - Logs: `/mnt/ssd/data/apps/delivery-calendar/logs/` and `docker logs delivery-calendar`
@@ -114,15 +115,29 @@ Suggested nightly cron line:
 
 ## Upgrade
 
-Push to `main` (or use Portainer's editor for a one-off patch on the stack):
+Push to `main`:
 
 ```bash
 git push origin main
 ```
 
-Then either wait for the stack's polling interval or hit **Pull and redeploy** in
-Portainer. The image is rebuilt from the new commit; the data volume and the
-secrets file are untouched.
+GitHub Actions builds and pushes the arm64 image (~3-4 min), then Portainer's
+5-minute source poll redeploys. For an immediate redeploy — pull the newest
+commit and image without waiting — call the API or press **Pull and redeploy**:
+
+```bash
+curl -sk -X PUT \
+  -H "X-API-Key: $(cat /home/server/.portainer-token)" \
+  -H 'Content-Type: application/json' -d '{}' \
+  "https://localhost:9443/api/stacks/14/git/redeploy?endpointId=3"
+```
+
+That endpoint pulls the latest commit from GitHub and the image from GHCR; the
+data volume and the secrets file are untouched.
+
+Portainer's updater **pulls images, it does not build them**. That is why
+`docker-compose.yml` has no `build:` — a build-on-Pi compose would fail every
+poll with "must be built from source".
 
 The SQLite schema is created with `CREATE TABLE IF NOT EXISTS`; a future column
 change needs a migration step in `Store.migrate()`.

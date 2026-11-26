@@ -85,8 +85,9 @@ files on.
    ```
 
    Everything else has a default in `docker-compose.yml`.
-6. **Deploy the stack.** Portainer clones the repo, builds `delivery-calendar:local`
-   on the Pi and starts it.
+6. **Deploy the stack.** Portainer clones the repo, pulls the prebuilt arm64 image
+   from GHCR (built by GitHub Actions) and starts it. Nothing is compiled on the
+   Pi.
 7. Turn on polling for the stack's **Git source** (Portainer 2.45 shows it on the
    source, interval 5 minutes). From then on a push to `main` is the deployment.
    A stack `AutoUpdate` block alone does not start the poll job.
