@@ -45,3 +45,14 @@ def test_validate_reports_missing_calendar_id_for_service_account():
 def test_validate_clean_in_dry_run():
     s = Settings.from_env({})
     assert s.validate() == []
+
+
+def test_app_password_and_user_are_whitespace_normalised():
+    s = Settings.from_env(
+        {
+            "MAIL_USER": " me@gmail.com ",
+            "MAIL_APP_PASSWORD": "abcd efgh ijkl mnop",
+        }
+    )
+    assert s.mail_user == "me@gmail.com"
+    assert s.mail_app_password == "abcdefghijklmnop"

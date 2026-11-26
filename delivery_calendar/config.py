@@ -112,8 +112,10 @@ class Settings:
     def from_env(cls, environ: Mapping[str, str] | None = None) -> "Settings":
         env = os.environ if environ is None else environ
         settings = cls(
-            mail_user=env.get("MAIL_USER", ""),
-            mail_app_password=env.get("MAIL_APP_PASSWORD", ""),
+            # Gmail shows app passwords as four groups of four; the spaces are
+            # display only, and IMAP LOGIN rejects them.
+            mail_user=env.get("MAIL_USER", "").strip(),
+            mail_app_password="".join(env.get("MAIL_APP_PASSWORD", "").split()),
             imap_host=env.get("IMAP_HOST", "imap.gmail.com"),
             imap_port=_int(env, "IMAP_PORT", 993),
             mail_folder=env.get("MAIL_FOLDER", "INBOX"),
