@@ -1,13 +1,18 @@
 # Deployed by Portainer from this Git repository.
 #
-# Portainer clones the repo, builds the image and runs `docker compose up`.
+# The image is built by GitHub Actions and pushed to GHCR; Portainer clones this
+# repo, pulls the image and runs `docker compose up` every 5 minutes. Portainer's
+# GitOps updater pulls images and does not build them, which is why there is no
+# `build:` here.
+#
 # Every value below is supplied by the Portainer stack's environment variables,
 # never committed: nothing secret lives in this file or in the repo.
 services:
   delivery-calendar:
-    build:
-      context: .
-    image: delivery-calendar:local
+    # Built by GitHub Actions (.github/workflows/image.yml) and pulled by
+    # Portainer. The auto-update path pulls images; it does not build them.
+    image: ${IMAGE:-ghcr.io/shalevs343/delivery-calendar:latest}
+    pull_policy: always
     container_name: delivery-calendar
     restart: unless-stopped
     environment:
