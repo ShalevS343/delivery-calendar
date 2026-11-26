@@ -2,7 +2,7 @@
 
 ## Stack
 
-- Source of truth: <https://github.com/ShalevS343/delivery-sync>
+- Source of truth: <https://github.com/ShalevS343/delivery-calendar>
 - Deployment: Portainer stack `delivery-sync`, built from that repository
   (commit on `main` or an explicit "Pull and redeploy" in Portainer)
 - Image: `delivery-sync:local` (built by Portainer on the Pi)

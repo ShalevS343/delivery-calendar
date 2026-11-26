@@ -60,7 +60,7 @@ refresh-token behaviour, which is why it is not the default.
 
 ## 4. Deploy from Git through Portainer
 
-The repository is <https://github.com/ShalevS343/delivery-sync> (public, no
+The repository is <https://github.com/ShalevS343/delivery-calendar> (public, no
 secrets). Portainer owns the deployment; the Pi is not a place you edit compose
 files on.
 
@@ -70,7 +70,7 @@ files on.
 2. Portainer → **Stacks → Add stack**.
 3. Name: `delivery-sync`.
 4. Build method: **Repository**.
-   - Repository URL: `https://github.com/ShalevS343/delivery-sync`
+   - Repository URL: `https://github.com/ShalevS343/delivery-calendar`
    - Compose path: `docker-compose.yml`
    - Repository reference: `refs/heads/main`
 5. **Environment variables** (Portainer stores these server-side; they are never

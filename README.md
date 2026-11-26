@@ -22,7 +22,7 @@ confidence plus the reasons a record needs a human.
 
 Deployed by **Portainer from Git**, not from this directory:
 
-- Repository: <https://github.com/ShalevS343/delivery-sync>
+- Repository: <https://github.com/ShalevS343/delivery-calendar>
 - Portainer stack: `delivery-sync` (Build method: Repository, path
   `docker-compose.yml`, ref `refs/heads/main`)
 - Configuration: Portainer stack environment variables (`MAIL_USER`,
