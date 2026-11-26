@@ -20,18 +20,31 @@ confidence plus the reasons a record needs a human.
 
 ## Deployment
 
-Deployed by **Portainer from Git**, not from this directory:
+Deployed by **Portainer from Git**, not from this directory. Full runbook,
+including the API calls and the gotchas: [`docs/portainer.md`](docs/portainer.md).
 
 - Repository: <https://github.com/ShalevS343/delivery-calendar>
-- Portainer stack: `delivery-calendar` (Build method: Repository, path
-  `docker-compose.yml`, ref `refs/heads/main`)
-- Configuration: Portainer stack environment variables (`MAIL_USER`,
-  `MAIL_APP_PASSWORD`, `CALENDAR_ID`, `UI_PASSWORD`, `DRY_RUN`, …). Nothing
-  secret is committed; `.env.example` documents every variable and its default.
+- Image: `ghcr.io/shalevs343/delivery-calendar:latest`, built for `linux/arm64`
+  by `.github/workflows/image.yml` on every push to `main`
+- Portainer: stack `delivery-calendar` (id 14, endpoint 3), Compose from
+  `docker-compose.yml` at `refs/heads/main`, GitOps poll every 5 minutes
+- Configuration: stack environment variables (`MAIL_USER`, `MAIL_APP_PASSWORD`,
+  `CALENDAR_ID`, `UI_PASSWORD`, `DRY_RUN`, …). Nothing secret is committed;
+  `.env.example` documents every variable and its default.
 - Secrets on disk: `/mnt/ssd/data/apps/delivery-calendar/secrets/service-account.json`
 
-A push to `main` plus the stack's polling (or **Pull and redeploy**) is the
-deployment. See `docs/setup.md` and `docs/operations.md`.
+`git push origin main` is the deployment: CI builds, Portainer's poll pulls the
+new commit and image, and the container is recreated only when the image digest
+changes. Want it now instead of at the next tick?
+
+```bash
+curl -sk -X PUT -H "X-API-Key: $(cat /home/server/.portainer-token)" \
+  -H 'Content-Type: application/json' -d '{}' \
+  "https://localhost:9443/api/stacks/14/git/redeploy?endpointId=3"
+```
+
+Portainer's updater pulls images; it does not build. That is why the compose file
+has no `build:` and the image is published from CI.
 
 ## Quick start (dry run, no credentials)
 
